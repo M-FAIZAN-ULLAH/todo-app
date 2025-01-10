@@ -1,53 +1,16 @@
-// "use client";
-// import Navbar from "../../components/navbar";
-// import TodoList from "../../components/todoCard";
-
-// const Dashboard = () => {
-//   return (
-//     <div className="bg-gray-900 min-h-screen">
-//       <Navbar />
-//       <div className="p-6">
-//         <TodoList />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
 "use client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useUser } from "../../context/userContext";
-import Navbar from "../../components/navbar";
-import TodoList from "../../components/todoCard";
 
-const Dashboard = () => {
-  const { user, getUser } = useUser();
-  const router = useRouter();
+import dynamic from "next/dynamic";
 
-  useEffect(() => {
-    if (!getUser()) {
-      router.push("/login"); // Redirect to login if user is not found
-    }
-  }, [getUser, router]);
+const Dashboard = dynamic(
+  () => import("../../components/dashboard"),
+  { ssr: false } // This ensures the component is rendered only on the client side
+);
 
-  if (!user) {
-    return (
-      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
-        <span className="text-white">Redirecting to Login...</span>
-      </div>
-    );
-  }
+import React from "react";
 
-  return (
-    <div className="bg-gray-900 min-h-screen">
-      <Navbar />
-      <div className="p-6">
-        <TodoList />
-      </div>
-    </div>
-  );
-};
+function page() {
+  return <Dashboard />;
+}
 
-export default Dashboard;
+export default page;
